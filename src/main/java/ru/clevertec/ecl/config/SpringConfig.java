@@ -10,9 +10,9 @@ import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan("ru.clevertec.ecl")
-public class SpringJdbcConfig {
+public class SpringConfig {
     @Bean
-    public DataSource postgresDataSource() {
+    public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/clevertec");
@@ -22,7 +22,7 @@ public class SpringJdbcConfig {
     }
 
     @Bean
-    public JdbcTemplate getJdbcTemplate() {
-        return new JdbcTemplate(postgresDataSource());
+    public JdbcTemplate jdbcTemplate() {
+        return new JdbcTemplate(dataSource());
     }
 }
