@@ -1,4 +1,4 @@
-package ru.clevertec.ecl.bean;
+package ru.clevertec.ecl.dto;
 
 import lombok.Data;
 
@@ -6,8 +6,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 
 @Data
-public class GiftCertificate {
-
+public class GiftCertificateDto {
     private Integer id;
     private String name;
     private String description;

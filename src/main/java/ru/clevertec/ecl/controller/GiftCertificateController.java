@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.clevertec.ecl.bean.GiftCertificate;
 import ru.clevertec.ecl.dao.GiftCertRepository;
+import ru.clevertec.ecl.utils.CustomBeanUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,29 +21,44 @@ public class GiftCertificateController {
     }
 
     @GetMapping()
-    public List<GiftCertificate> gelAllProducts() {
-        return repository.findAll();
+    public List<GiftCertificate> gelAllCertificates(@RequestParam(value = "tag_name", required = false) String tagName,
+                                                    @RequestParam(value = "cert_name", required = false) String certName,
+                                                    @RequestParam(value = "description", required = false) String description,
+                                                    @RequestParam(value = "sort_by_name", required = false) String sortByName,
+                                                    @RequestParam(value = "sort_by_date", required = false) String sortByDate
+    ) {
+        List<GiftCertificate> resultList;
+        if (tagName == null && certName == null && description == null) {
+            resultList = repository.findAll();
+        } else {
+            resultList = CustomBeanUtils.filterGiftCertificatesList(repository, tagName, certName, description);
+        }
+        if (sortByName != null || sortByDate != null) {
+            resultList = CustomBeanUtils.orderResultList(resultList, sortByName, sortByDate);
+        }
+        return resultList;
     }
 
     @GetMapping("/{id}")
-    public GiftCertificate getGiftCertificateById(@PathVariable("id") GiftCertificate giftCertificate) {
-        return giftCertificate;
+    public GiftCertificate getGiftCertificateById(@PathVariable("id") int id) {
+        return repository.findById(id);
     }
 
     @PostMapping()
     public GiftCertificate createGiftCertificate(@RequestBody GiftCertificate giftCertificate) {
         return repository.save(giftCertificate);
     }
-//
-//    @PatchMapping("/{id}")
-//    public Product update(@PathVariable("id") Product productFromDb,
-//                          @RequestBody Product product) {
-//        BeanUtils.copyProperties(product, productFromDb, "id");
-//        return productDaoSpring.save(productFromDb);
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public void delete(@PathVariable("id") Product product) {
-//        productDaoSpring.delete(product);
-//    }
+
+    @PatchMapping("/{id}")
+    public GiftCertificate update(@PathVariable("id") int id,
+                                  @RequestBody GiftCertificate giftCertificate) {
+        GiftCertificate giftCertificateFromDb = repository.findById(id);
+        CustomBeanUtils.copyProperties(giftCertificate, giftCertificateFromDb);
+        return repository.save(giftCertificateFromDb);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") int id) {
+        repository.delete(id);
+    }
 }

@@ -1,24 +1,29 @@
 package ru.clevertec.ecl.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 import org.springframework.jdbc.core.RowMapper;
 import ru.clevertec.ecl.bean.GiftCertificate;
+import ru.clevertec.ecl.dao.GiftCertRepository;
+import ru.clevertec.ecl.dto.GiftCertificateDto;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class GiftCertificateMapper implements RowMapper<GiftCertificate> {
+@Mapper
+public interface GiftCertificateMapper {
 
-        @Override
-        public GiftCertificate mapRow(final ResultSet rs, final int rowNum) throws SQLException {
-            final GiftCertificate giftCertificate = new GiftCertificate();
+//    @Mapping(target="employeeId", source="entity.id")
+//    @Mapping(target="employeeName", source="entity.name")
+//    GiftCertRepository giftCertificateToEmployeeRepository(GiftCertificate entity);
+//
+//    @Mapping(target="id", source="dto.employeeId")
+//    @Mapping(target="name", source="dto.employeeName")
+//    GiftCertificate employeeRepositoryToGiftCertificate(GiftCertRepository repository);
 
-            giftCertificate.setId(rs.getInt("id"));
-            giftCertificate.setDescription(rs.getString("description"));
-            giftCertificate.setPrice(rs.getFloat("price"));
-            giftCertificate.setDuration(rs.getInt("duration"));
-            giftCertificate.setCreateDate(rs.getTimestamp("creation_date").toLocalDateTime());
-            giftCertificate.setLastUpdateDate(rs.getTimestamp("last_update_date").toLocalDateTime());
+    GiftCertificateMapper INSTANCE = Mappers.getMapper(GiftCertificateMapper.class);
 
-            return giftCertificate;
-    }
+    GiftCertificateDto toDto(GiftCertificate giftCertificate);
+
 }

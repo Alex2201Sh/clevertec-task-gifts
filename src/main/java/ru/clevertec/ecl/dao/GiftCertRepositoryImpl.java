@@ -20,7 +20,31 @@ public class GiftCertRepositoryImpl implements GiftCertRepository {
 
     @Override
     public List<GiftCertificate> findAll() {
-        return jdbcTemplate.query("SELECT * FROM gift_certificates",
+        List<GiftCertificate> query = jdbcTemplate.query("SELECT * FROM gift_certificates",
+                new BeanPropertyRowMapper<>(GiftCertificate.class));
+        return query;
+    }
+
+    @Override
+    public List<GiftCertificate> findByPartOfName(String partOfName) {
+        final String query = "SELECT * FROM gift_certificates WHERE name LIKE concat('%',?,'%')";
+        return jdbcTemplate.query(query, new Object[]{partOfName},
+                new BeanPropertyRowMapper<>(GiftCertificate.class));
+    }
+
+    @Override
+    public List<GiftCertificate> findByPartOfDescription(String partOfDescription) {
+        final String query = "SELECT * FROM gift_certificates WHERE description LIKE concat('%',?,'%')";
+        return jdbcTemplate.query(query, new Object[]{partOfDescription},
+                new BeanPropertyRowMapper<>(GiftCertificate.class));
+    }
+
+    @Override
+    public List<GiftCertificate> findCertificateByTagName(String tagName) {
+        final String query = "SELECT * from gift_certificates where id " +
+                "IN (SELECT certificate_id FROM certificate_tag WHERE tag_id = " +
+                "(SELECT tags.id FROM tags WHERE name = ?))";
+        return jdbcTemplate.query(query, new Object[]{tagName},
                 new BeanPropertyRowMapper<>(GiftCertificate.class));
     }
 
@@ -34,7 +58,8 @@ public class GiftCertRepositoryImpl implements GiftCertRepository {
     @Override
     public GiftCertificate save(GiftCertificate giftCertificate) {
         if (giftCertificate.getId() == 0) {
-            jdbcTemplate.update("insert into gift_certificates values (?, ?, ?, ?, ?, ?)",
+            jdbcTemplate.update("insert into gift_certificates (name, description, price, duration, create_date, last_update_date) " +
+                            "values (?, ?, ?, ?, ?, ?)",
                     giftCertificate.getName(),
                     giftCertificate.getDescription(),
                     giftCertificate.getPrice(),
@@ -42,10 +67,10 @@ public class GiftCertRepositoryImpl implements GiftCertRepository {
                     giftCertificate.getCreateDate(),
                     giftCertificate.getLastUpdateDate());
         } else {
-            jdbcTemplate.update("UPDATE gift_certificates SET name = ?1, description = ?2," +
-                            "price = ?3, duration = ?4," +
-                            "create_date = ?5, last_update_date = ?6 " +
-                            "WHERE id = ?7",
+            jdbcTemplate.update("UPDATE gift_certificates SET name = ?, description = ?," +
+                            "price = ?, duration = ?," +
+                            "create_date = ?, last_update_date = ? " +
+                            "WHERE id = ?",
                     giftCertificate.getName(),
                     giftCertificate.getDescription(),
                     giftCertificate.getPrice(),
@@ -54,7 +79,7 @@ public class GiftCertRepositoryImpl implements GiftCertRepository {
                     giftCertificate.getLastUpdateDate(),
                     giftCertificate.getId());
         }
-        return findById(giftCertificate.getId());
+        return giftCertificate;
     }
 
     @Override

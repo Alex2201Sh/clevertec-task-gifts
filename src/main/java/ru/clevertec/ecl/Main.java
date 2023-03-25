@@ -1,18 +1,17 @@
 package ru.clevertec.ecl;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.jdbc.core.JdbcTemplate;
-import ru.clevertec.ecl.bean.GiftCertificate;
-import ru.clevertec.ecl.config.SpringConfig;
-import ru.clevertec.ecl.dao.GiftCertDao;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.Duration;
+import java.time.Period;
+
+@SpringBootApplication
 public class Main {
 
-//    public static void main(String[] args) {
-//        public static void main(String[] args) {
-//            SpringApplication.run(Application.class, args);
-//        }
-//
-//    }
+    public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
+    }
+
+
 }
