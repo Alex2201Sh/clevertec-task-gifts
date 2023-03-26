@@ -21,9 +21,8 @@ public class GiftCertRepositoryImpl implements GiftCertRepository {
 
     @Override
     public List<GiftCertificate> findAll() {
-        List<GiftCertificate> query = jdbcTemplate.query("SELECT * FROM gift_certificates",
+        return jdbcTemplate.query("SELECT * FROM gift_certificates",
                 new BeanPropertyRowMapper<>(GiftCertificate.class));
-        return query;
     }
 
     @Override

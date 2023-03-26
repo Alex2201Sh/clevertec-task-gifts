@@ -56,7 +56,7 @@ public class GiftCertificateController {
     @PatchMapping("/{id}")
     public GiftCertificate update(@PathVariable("id") int id,
                                   @RequestBody GiftCertificate giftCertificate) throws MyException {
-        GiftCertificate giftCertificateFromDb = null;
+        GiftCertificate giftCertificateFromDb;
         try {
             giftCertificateFromDb = repository.findById(id);
         } catch (MyException e) {
