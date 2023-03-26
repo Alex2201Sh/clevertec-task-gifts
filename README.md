@@ -62,7 +62,7 @@ response body
 “errorMessage”: “Requested resource not found (id = 55)”,
 “errorCode”: 40401
 }
-where *errorCode” is your custom code (it can be based on http status and requested resource - certificate or tag)
+where "errorCode" is your custom code (it can be based on http status and requested resource - certificate or tag)
    _(NOT IMPLEMENTED)_
 8. Abstraction should be used everywhere to avoid code duplication. _(IMPLEMENTED)_
 9. Several configurations should be implemented (at least two - dev and prod). _(NOT IMPLEMENTED)_
