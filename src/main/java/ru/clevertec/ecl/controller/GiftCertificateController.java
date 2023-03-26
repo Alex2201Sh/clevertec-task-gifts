@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.clevertec.ecl.bean.GiftCertificate;
 import ru.clevertec.ecl.dao.GiftCertRepository;
+import ru.clevertec.ecl.exceptions.MyException;
 import ru.clevertec.ecl.utils.CustomBeanUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -40,8 +40,12 @@ public class GiftCertificateController {
     }
 
     @GetMapping("/{id}")
-    public GiftCertificate getGiftCertificateById(@PathVariable("id") int id) {
-        return repository.findById(id);
+    public GiftCertificate getGiftCertificateById(@PathVariable("id") int id) throws MyException {
+        try {
+            return repository.findById(id);
+        } catch (MyException exc) {
+            throw new MyException("Gift certificate with id " + id + " doesn't exist");
+        }
     }
 
     @PostMapping()
@@ -51,8 +55,13 @@ public class GiftCertificateController {
 
     @PatchMapping("/{id}")
     public GiftCertificate update(@PathVariable("id") int id,
-                                  @RequestBody GiftCertificate giftCertificate) {
-        GiftCertificate giftCertificateFromDb = repository.findById(id);
+                                  @RequestBody GiftCertificate giftCertificate) throws MyException {
+        GiftCertificate giftCertificateFromDb = null;
+        try {
+            giftCertificateFromDb = repository.findById(id);
+        } catch (MyException e) {
+            throw new MyException("Gift certificate with id " + id + " doesn't exist");
+        }
         CustomBeanUtils.copyProperties(giftCertificate, giftCertificateFromDb);
         return repository.save(giftCertificateFromDb);
     }
@@ -61,4 +70,5 @@ public class GiftCertificateController {
     public void delete(@PathVariable("id") int id) {
         repository.delete(id);
     }
+
 }

@@ -1,7 +1,9 @@
 package ru.clevertec.ecl.dto;
 
 import lombok.Data;
+import org.postgresql.util.PGInterval;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
 
@@ -11,7 +13,7 @@ public class GiftCertificateDto {
     private String name;
     private String description;
     private Float price;
-    private Period duration;
+    private PGInterval duration;
     private LocalDateTime createDate;
     private LocalDateTime lastUpdateDate;
 }

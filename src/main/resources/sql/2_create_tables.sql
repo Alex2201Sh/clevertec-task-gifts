@@ -15,7 +15,7 @@ create table public.gift_certificates
 create table public.tags
 (
     id               bigserial
-        constraint gift_certificates_pk
+        constraint tags_pk
             primary key,
     name             varchar(32)
 );

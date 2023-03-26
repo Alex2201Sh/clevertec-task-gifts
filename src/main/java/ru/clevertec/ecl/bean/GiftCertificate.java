@@ -1,6 +1,7 @@
 package ru.clevertec.ecl.bean;
 
 import lombok.Data;
+import org.postgresql.util.PGInterval;
 
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -12,7 +13,7 @@ public class GiftCertificate {
     private String name;
     private String description;
     private Float price;
-    private Period duration;
+    private PGInterval duration;
     private LocalDateTime createDate;
     private LocalDateTime lastUpdateDate;
 }

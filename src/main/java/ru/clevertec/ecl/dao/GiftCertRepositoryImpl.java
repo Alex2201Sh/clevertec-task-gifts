@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.clevertec.ecl.bean.GiftCertificate;
+import ru.clevertec.ecl.exceptions.MyException;
 
 import java.util.List;
 
@@ -49,10 +50,12 @@ public class GiftCertRepositoryImpl implements GiftCertRepository {
     }
 
     @Override
-    public GiftCertificate findById(int id) {
+    public GiftCertificate findById(int id) throws MyException {
         final String query = "SELECT * FROM gift_certificates WHERE id = ?";
-        return jdbcTemplate.queryForObject(query, new Object[]{id},
+        GiftCertificate certificate = jdbcTemplate.queryForObject(query, new Object[]{id},
                 new BeanPropertyRowMapper<>(GiftCertificate.class));
+        if (certificate == null) throw new MyException("Gift certificate with id " + id + " doesn't exist");
+        return certificate;
     }
 
     @Override
