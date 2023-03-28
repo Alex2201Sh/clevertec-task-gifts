@@ -66,14 +66,20 @@ public class GiftCertRepositoryImpl implements GiftCertRepository {
     @Override
     public GiftCertificate save(GiftCertificate giftCertificate) {
         if (giftCertificate.getId() == null) {
-            jdbcTemplate.update("insert into gift_certificates (name, description, price, duration, create_date, last_update_date) " +
-                            "values (?, ?, ?, ?, ?, ?)",
+            String insert = "insert into gift_certificates (name, description, price, duration, create_date, last_update_date) " +
+                    "values (?, ?, ?, ?, ?, ?)";
+            jdbcTemplate.update((insert),
                     giftCertificate.getName(),
                     giftCertificate.getDescription(),
                     giftCertificate.getPrice(),
                     giftCertificate.getDuration(),
                     giftCertificate.getCreateDate(),
                     giftCertificate.getLastUpdateDate());
+            String findSavedObject = "SELECT id from gift_certificates WHERE concat(name,description) = concat(?,?)";
+            Integer savedObjectId = jdbcTemplate.queryForObject(findSavedObject,
+                    new Object[]{giftCertificate.getName(),
+                            giftCertificate.getDescription()}, Integer.class);
+            giftCertificate.setId(savedObjectId);
         } else {
             jdbcTemplate.update("UPDATE gift_certificates SET name = ?, description = ?," +
                             "price = ?, duration = ?," +

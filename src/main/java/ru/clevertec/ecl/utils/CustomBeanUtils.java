@@ -3,6 +3,7 @@ package ru.clevertec.ecl.utils;
 import ru.clevertec.ecl.bean.GiftCertificate;
 import ru.clevertec.ecl.dao.GiftCertRepository;
 import ru.clevertec.ecl.dto.GiftCertificateDto;
+import ru.clevertec.ecl.service.CrudService;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -34,46 +35,46 @@ public class CustomBeanUtils {
         }
     }
 
-    public static List<GiftCertificate> filterGiftCertificatesList(GiftCertRepository repository, String tagName, String certName, String description) {
-        List<GiftCertificate> resultList = new ArrayList<>();
+    public static List<GiftCertificateDto> filterGiftCertificatesList(CrudService service, String tagName, String certName, String description) {
+        List<GiftCertificateDto> resultList = new ArrayList<>();
         if (tagName != null) {
-            resultList.addAll(repository.findCertificateByTagName(tagName));
+            resultList.addAll(service.findCertificateByTagName(tagName));
         }
         if (certName != null) {
             if (resultList.isEmpty()) {
-                resultList.addAll(repository.findByPartOfName(certName));
+                resultList.addAll(service.findByPartOfName(certName));
             } else {
-                resultList.retainAll(repository.findByPartOfName(certName));
+                resultList.retainAll(service.findByPartOfName(certName));
             }
         }
         if (description != null) {
             if (resultList.isEmpty()) {
-                resultList.addAll(repository.findByPartOfDescription(description));
+                resultList.addAll(service.findByPartOfDescription(description));
             } else {
-                resultList.retainAll(repository.findByPartOfDescription(description));
+                resultList.retainAll(service.findByPartOfDescription(description));
             }
         }
         resultList = resultList.stream().distinct().toList();
         return resultList;
     }
 
-    public static List<GiftCertificate> orderResultList(List<GiftCertificate> resultList, String sortByName, String sortByDate) {
-        Comparator<GiftCertificate> firstComparator;
+    public static List<GiftCertificateDto> orderResultList(List<GiftCertificateDto> resultList, String sortByName, String sortByDate) {
+        Comparator<GiftCertificateDto> firstComparator;
         if (sortByName != null) {
             firstComparator = ((o1, o2) -> ("desc".equalsIgnoreCase(sortByName) ? -1 : 1) * o1.getName().compareTo(o2.getName()));
         } else {
             if (sortByDate != null)
                 firstComparator = (o1, o2) -> ("desc".equalsIgnoreCase(sortByDate) ? -1 : 1) * o1.getCreateDate().compareTo(o2.getCreateDate());
-            else firstComparator = Comparator.comparing(GiftCertificate::getId);
+            else firstComparator = Comparator.comparing(GiftCertificateDto::getId);
         }
 
-        Comparator<GiftCertificate> secondComparator = sortByName != null ?
+        Comparator<GiftCertificateDto> secondComparator = sortByName != null ?
                 (o1, o2) -> {
                     if ("desc".equalsIgnoreCase(sortByDate))
                         return -1 * o1.getCreateDate().compareTo(o2.getCreateDate());
                     return o1.getCreateDate().compareTo(o2.getCreateDate());
                 } :
-                Comparator.comparing(GiftCertificate::getId);
+                Comparator.comparing(GiftCertificateDto::getId);
 
         return resultList.stream()
                 .sorted(firstComparator)

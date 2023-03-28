@@ -8,11 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.clevertec.ecl.bean.GiftCertificate;
-import ru.clevertec.ecl.dao.GiftCertRepository;
 import ru.clevertec.ecl.dto.GiftCertificateDto;
 import ru.clevertec.ecl.exceptions.MyException;
-import ru.clevertec.ecl.service.GiftCertificateService;
 import ru.clevertec.ecl.service.ObjectSerializer;
+import ru.clevertec.ecl.service.impl.GiftCertificateService;
 import ru.clevertec.ecl.utils.CustomBeanUtils;
 
 import java.net.URI;
@@ -24,24 +23,26 @@ import java.util.Map;
 @RequestMapping("/gifts")
 public class GiftCertificateController {
 
-    private final GiftCertRepository repository;
     private final ObjectSerializer serializer;
     private final GiftCertificateService service;
 
     @Autowired
-    public GiftCertificateController(GiftCertRepository repository, ObjectSerializer serializer, GiftCertificateService service) {
-        this.repository = repository;
+    public GiftCertificateController(ObjectSerializer serializer, GiftCertificateService service) {
         this.serializer = serializer;
         this.service = service;
     }
 
     @GetMapping()
-    public ResponseEntity<String> gelAllCertificates(@RequestParam(value = "tag_name", required = false) String tagName, @RequestParam(value = "cert_name", required = false) String certName, @RequestParam(value = "description", required = false) String description, @RequestParam(value = "sort_by_name", required = false) String sortByName, @RequestParam(value = "sort_by_date", required = false) String sortByDate) {
-        List<GiftCertificate> resultList;
+    public ResponseEntity<String> gelAllCertificates(@RequestParam(value = "tag_name", required = false) String tagName,
+                                                     @RequestParam(value = "cert_name", required = false) String certName,
+                                                     @RequestParam(value = "description", required = false) String description,
+                                                     @RequestParam(value = "sort_by_name", required = false) String sortByName,
+                                                     @RequestParam(value = "sort_by_date", required = false) String sortByDate) {
+        List<GiftCertificateDto> resultList;
         if (tagName == null && certName == null && description == null) {
-            resultList = repository.findAll();
+            resultList = service.findAll();
         } else {
-            resultList = CustomBeanUtils.filterGiftCertificatesList(repository, tagName, certName, description);
+            resultList = CustomBeanUtils.filterGiftCertificatesList(service, tagName, certName, description);
         }
         if (sortByName != null || sortByDate != null) {
             resultList = CustomBeanUtils.orderResultList(resultList, sortByName, sortByDate);
@@ -67,8 +68,8 @@ public class GiftCertificateController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> createGiftCertificate(@RequestBody GiftCertificate giftCertificate) {
-        GiftCertificate certificate = repository.save(giftCertificate);
+    public ResponseEntity<String> createGiftCertificate(@RequestBody GiftCertificateDto giftCertificate) {
+        GiftCertificateDto certificate = service.save(giftCertificate);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/gifts/{id}").buildAndExpand(certificate.getId()).toUri();
         return ResponseEntity.status(HttpStatus.CREATED).location(uri).body(serializer.objectToJson(certificate));
     }
@@ -84,7 +85,7 @@ public class GiftCertificateController {
                     serializer.objectToJson(exc), headers, HttpStatus.BAD_REQUEST);
         }
         CustomBeanUtils.copyProperties(giftCertificate, giftCertificateFromDb);
-        GiftCertificate saved = service.save(giftCertificateFromDb);
+        GiftCertificateDto saved = service.save(giftCertificateFromDb);
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(serializer.objectToJson(saved), headers, HttpStatus.OK);
     }
@@ -92,7 +93,7 @@ public class GiftCertificateController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") int id) {
-        repository.delete(id);
+        service.delete(id);
     }
 
 }

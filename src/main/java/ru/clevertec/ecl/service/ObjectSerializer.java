@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.stereotype.Component;
+import ru.clevertec.ecl.dto.GiftCertificateDto;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -24,17 +25,7 @@ public class ObjectSerializer {
         }
     }
 
-    private static ObjectMapper newMapper() {
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.setLocale(Locale.ENGLISH);
-        mapper.registerModule(new JSR310Module());
-        mapper.setDateFormat(df);
-        mapper.registerModule(new JavaTimeModule());
-        return mapper;
-    }
-
-    private static Object getObject(String newJson) {
+    public GiftCertificateDto getObject(String newJson) {
         try {
             return newMapper().readValue(newJson, new TypeReference<>() {
             });
@@ -43,11 +34,13 @@ public class ObjectSerializer {
         }
     }
 
-    private static String mapperWrite(Object object) {
-        try {
-            return newMapper().writeValueAsString(object);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    private static ObjectMapper newMapper() {
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.setLocale(Locale.ENGLISH);
+        mapper.registerModule(new JSR310Module());
+        mapper.setDateFormat(df);
+        mapper.registerModule(new JavaTimeModule());
+        return mapper;
     }
 }

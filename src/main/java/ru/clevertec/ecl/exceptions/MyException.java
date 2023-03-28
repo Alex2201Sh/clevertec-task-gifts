@@ -1,8 +1,5 @@
 package ru.clevertec.ecl.exceptions;
 
-import lombok.Data;
-
-@Data
 public class MyException extends Exception {
 
     private final String message;
@@ -13,5 +10,12 @@ public class MyException extends Exception {
         this.code = code;
     }
 
+    @Override
+    public String getMessage() {
+        return message;
+    }
 
+    public String getCode() {
+        return code;
+    }
 }
