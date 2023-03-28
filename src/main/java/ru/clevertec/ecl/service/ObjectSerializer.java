@@ -15,7 +15,8 @@ import java.util.Locale;
 
 @Component
 public class ObjectSerializer {
-    public static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    public static final SimpleDateFormat df =
+            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     public String objectToJson(Object object) {
         try {
