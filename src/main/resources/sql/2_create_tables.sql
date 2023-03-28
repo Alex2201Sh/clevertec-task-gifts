@@ -1,4 +1,4 @@
-create table if not exists public.gift_certificates
+create table public.gift_certificates
 (
     id               bigserial
         constraint gift_certificates_pk
@@ -8,7 +8,9 @@ create table if not exists public.gift_certificates
     price            double precision,
     duration         interval,
     create_date      timestamp,
-    last_update_date timestamp
+    last_update_date timestamp,
+    constraint gift_certificates_pk2
+        unique (name, description)
 );
 
 
