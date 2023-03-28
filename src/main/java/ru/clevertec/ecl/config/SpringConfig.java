@@ -1,23 +1,39 @@
 package ru.clevertec.ecl.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan("ru.clevertec.ecl")
+//@EnableTransactionManagement
+@PropertySource("classpath:application-dev.properties")
 public class SpringConfig {
+
+    @Value("${database.driver}")
+    private String databaseDriver;
+    @Value("${database.url}")
+    private String databaseUrl;
+    @Value("${database.user}")
+    private String databaseUser;
+    @Value("${database.password}")
+    private String databasePassword;
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/clevertec");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres");
+        dataSource.setDriverClassName(databaseDriver);
+        dataSource.setUrl(databaseUrl);
+        dataSource.setUsername(databaseUser);
+        dataSource.setPassword(databasePassword);
         return dataSource;
     }
 
@@ -25,4 +41,5 @@ public class SpringConfig {
     public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
     }
+
 }
