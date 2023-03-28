@@ -41,10 +41,14 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public Tag save(Tag tag) {
-        if (tag.getId() == 0) {
-            jdbcTemplate.update("insert into tags (name) " +
+        if (tag.getId() == null) {
+            jdbcTemplate.update("INSERT INTO tags (name) " +
                             "values (?)",
                     tag.getName());
+            String findSavedObject = "SELECT id from tags WHERE name = ?";
+            Integer savedObjectId = jdbcTemplate.queryForObject(findSavedObject,
+                    new Object[]{tag.getName()}, Integer.class);
+            tag.setId(savedObjectId);
         } else {
             jdbcTemplate.update("UPDATE tags SET name = ? WHERE id = ?",
                     tag.getName(), tag.getId());

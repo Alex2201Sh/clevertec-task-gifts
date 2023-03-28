@@ -6,15 +6,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan("ru.clevertec.ecl")
-//@EnableTransactionManagement
 @PropertySource("classpath:application-dev.properties")
 public class SpringConfig {
 
@@ -27,6 +24,10 @@ public class SpringConfig {
     @Value("${database.password}")
     private String databasePassword;
 
+    /**
+     * Method create source of data from database.
+     * @return - DataSource object.
+     */
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -37,6 +38,10 @@ public class SpringConfig {
         return dataSource;
     }
 
+    /**
+     * Method create JdbcTemplate for work with queries.
+     * @return - JdbcTemplate object
+     */
     @Bean
     public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());

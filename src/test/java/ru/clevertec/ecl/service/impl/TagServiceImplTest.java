@@ -6,26 +6,26 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import ru.clevertec.ecl.dao.GiftCertRepository;
-import ru.clevertec.ecl.dao.impl.GiftCertRepositoryImpl;
-import ru.clevertec.ecl.dto.GiftCertificateDto;
+import ru.clevertec.ecl.dao.TagRepository;
+import ru.clevertec.ecl.dao.impl.TagRepositoryImpl;
+import ru.clevertec.ecl.dto.TagDto;
 import ru.clevertec.ecl.exceptions.MyException;
 import ru.clevertec.ecl.mapper.GiftCertificateMapperImpl;
 import ru.clevertec.ecl.mapper.Mapper;
 import ru.clevertec.ecl.mapper.TagMapperImpl;
-import ru.clevertec.ecl.service.GiftCertificatesService;
-import ru.clevertec.ecl.test_builder.TestBuilder;
+import ru.clevertec.ecl.service.TagService;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class GiftCertificateServiceTest {
+class TagServiceImplTest {
 
-    private static GiftCertificatesService service;
+    private static TagService service;
+
     private static Integer testObjectId;
 
-    private static GiftCertificateDto testObject;
+    private static TagDto testObject;
 
     @BeforeAll
     static void setUp() {
@@ -36,18 +36,18 @@ class GiftCertificateServiceTest {
         dataSource.setPassword("postgres");
         JdbcTemplate template = new JdbcTemplate(dataSource);
 
-        GiftCertRepository repository = new GiftCertRepositoryImpl(template);
+        TagRepository repository = new TagRepositoryImpl(template);
 
-        service = new GiftCertificateServiceImpl(
+        service = new TagServiceImpl(
                 new Mapper(new TagMapperImpl(), new GiftCertificateMapperImpl()),
                 repository);
     }
 
     @BeforeEach
     void init() {
-        testObject = service.save(TestBuilder.giftCertificateDtoBuilder()
-                .setName("testObject")
-                .build());
+        TagDto tagDto = new TagDto();
+        tagDto.setName("test name");
+        testObject = service.save(tagDto);
         testObjectId = testObject.getId();
     }
 
@@ -60,31 +60,19 @@ class GiftCertificateServiceTest {
 
     @Test
     void findAll() {
-        List<GiftCertificateDto> all = service.findAll();
+        List<TagDto> all = service.findAll();
         assertThat(all).isNotEmpty();
     }
 
     @Test
-    void findByPartOfName() {
-        List<GiftCertificateDto> list = service.findByPartOfName("test");
-        assertThat(list).isNotEmpty();
-    }
-
-    @Test
-    void findByPartOfDescription() {
-        List<GiftCertificateDto> list = service.findByPartOfDescription("test");
-        assertThat(list).isNotEmpty();
-    }
-
-    @Test
-    void findCertificateByTagName() {
-        List<GiftCertificateDto> list = service.findCertificateByTagName("two");
-        assertThat(list).isNotEmpty();
+    void findByName() {
+        TagDto tagDto = service.findByName(testObject.getName());
+        assertThat(tagDto).isEqualTo(testObject);
     }
 
     @Test
     void findById() throws MyException {
-        GiftCertificateDto byId = service.findById(testObjectId);
+        TagDto byId = service.findById(testObjectId);
         assertThat(byId).isEqualTo(testObject);
     }
 }

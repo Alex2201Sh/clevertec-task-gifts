@@ -3,7 +3,10 @@ package ru.clevertec.ecl.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.clevertec.ecl.bean.Tag;
-import ru.clevertec.ecl.dao.TagRepository;
+import ru.clevertec.ecl.dto.TagDto;
+import ru.clevertec.ecl.exceptions.MyException;
+import ru.clevertec.ecl.mapper.Mapper;
+import ru.clevertec.ecl.service.TagService;
 
 import java.util.List;
 
@@ -11,38 +14,40 @@ import java.util.List;
 @RequestMapping("/tags")
 public class TagController {
 
-    private final TagRepository repository;
+    private final TagService service;
+    private final Mapper mapper;
 
     @Autowired
-    public TagController(TagRepository repository) {
-        this.repository = repository;
+    public TagController(TagService service, Mapper mapper) {
+        this.service = service;
+        this.mapper = mapper;
     }
 
     @GetMapping()
-    public List<Tag> gelAllTags() {
-        return repository.findAll();
+    public List<TagDto> gelAllTags() {
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public Tag getTagById(@PathVariable("id") int id) {
-        return repository.findById(id);
+    public TagDto getTagById(@PathVariable("id") int id) throws MyException {
+        return service.findById(id);
     }
 
     @PostMapping()
-    public Tag createGiftCertificate(@RequestBody Tag tag) {
-        return repository.save(tag);
+    public TagDto createGiftCertificate(@RequestBody Tag tag) {
+        return service.save(mapper.convert(tag));
     }
 
     @PatchMapping("/{id}")
-    public Tag update(@PathVariable("id") int id,
-                      @RequestBody Tag tag) {
-        Tag tagFromDb = repository.findById(id);
+    public TagDto update(@PathVariable("id") int id,
+                         @RequestBody Tag tag) throws MyException {
+        TagDto tagFromDb = service.findById(id);
         tagFromDb.setName(tag.getName());
-        return repository.save(tagFromDb);
+        return service.save(tagFromDb);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") int id) {
-        repository.delete(id);
+        service.delete(id);
     }
 }

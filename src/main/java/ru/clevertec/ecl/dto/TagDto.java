@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class TagDto {
-    private int id;
+    private Integer id;
     private String name;
 
 }

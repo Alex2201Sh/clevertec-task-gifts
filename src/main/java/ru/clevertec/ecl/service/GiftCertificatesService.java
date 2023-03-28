@@ -1,12 +1,11 @@
 package ru.clevertec.ecl.service;
 
-import ru.clevertec.ecl.bean.GiftCertificate;
 import ru.clevertec.ecl.dto.GiftCertificateDto;
 import ru.clevertec.ecl.exceptions.MyException;
 
 import java.util.List;
 
-public interface CrudService {
+public interface GiftCertificatesService {
     List<GiftCertificateDto> findAll();
 
     List<GiftCertificateDto> findByPartOfName(String partOnName);
@@ -20,4 +19,12 @@ public interface CrudService {
     GiftCertificateDto save(GiftCertificateDto giftCertificateDto);
 
     int delete(int id);
+
+    List<GiftCertificateDto> filterGiftCertificatesList(String tagName,
+                                                        String certName,
+                                                        String description);
+
+    List<GiftCertificateDto> orderResultList(List<GiftCertificateDto> resultList,
+                                             String sortByName,
+                                             String sortByDate);
 }
