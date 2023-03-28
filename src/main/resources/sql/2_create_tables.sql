@@ -1,4 +1,4 @@
-create table public.gift_certificates
+create table if not exists public.gift_certificates
 (
     id               bigserial
         constraint gift_certificates_pk
@@ -12,7 +12,7 @@ create table public.gift_certificates
 );
 
 
-create table public.tags
+create table if not exists public.tags
 (
     id               bigserial
         constraint tags_pk
@@ -20,7 +20,7 @@ create table public.tags
     name             varchar(32)
 );
 
-create table public.certificate_tag
+create table if not exists public.certificate_tag
 (
     certificate_id integer,
     tag_id         integer,

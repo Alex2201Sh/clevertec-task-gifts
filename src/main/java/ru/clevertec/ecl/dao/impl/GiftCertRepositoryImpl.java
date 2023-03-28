@@ -1,10 +1,12 @@
-package ru.clevertec.ecl.dao;
+package ru.clevertec.ecl.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.clevertec.ecl.bean.GiftCertificate;
+import ru.clevertec.ecl.dao.GiftCertRepository;
 import ru.clevertec.ecl.exceptions.MyException;
 
 import java.util.List;
@@ -51,15 +53,19 @@ public class GiftCertRepositoryImpl implements GiftCertRepository {
     @Override
     public GiftCertificate findById(int id) throws MyException {
         final String query = "SELECT * FROM gift_certificates WHERE id = ?";
-        GiftCertificate certificate = jdbcTemplate.queryForObject(query, new Object[]{id},
-                new BeanPropertyRowMapper<>(GiftCertificate.class));
-        if (certificate == null) throw new MyException("Gift certificate with id " + id + " doesn't exist");
+        GiftCertificate certificate;
+        try {
+            certificate = jdbcTemplate.queryForObject(query, new Object[]{id},
+                    new BeanPropertyRowMapper<>(GiftCertificate.class));
+        } catch (EmptyResultDataAccessException e) {
+            throw new MyException("Requested resource not found (id =  " + id + ")", "40401");
+        }
         return certificate;
     }
 
     @Override
     public GiftCertificate save(GiftCertificate giftCertificate) {
-        if (giftCertificate.getId() == 0) {
+        if (giftCertificate.getId() == null) {
             jdbcTemplate.update("insert into gift_certificates (name, description, price, duration, create_date, last_update_date) " +
                             "values (?, ?, ?, ?, ?, ?)",
                     giftCertificate.getName(),

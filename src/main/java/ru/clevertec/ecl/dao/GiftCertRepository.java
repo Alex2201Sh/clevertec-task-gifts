@@ -6,7 +6,6 @@ import ru.clevertec.ecl.exceptions.MyException;
 import java.util.List;
 
 public interface GiftCertRepository {
-
     List<GiftCertificate> findAll();
 
     List<GiftCertificate> findByPartOfName(String partOnName);

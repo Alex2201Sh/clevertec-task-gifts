@@ -1,10 +1,11 @@
-package ru.clevertec.ecl.dao;
+package ru.clevertec.ecl.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.clevertec.ecl.bean.Tag;
+import ru.clevertec.ecl.dao.TagRepository;
 
 import java.util.List;
 

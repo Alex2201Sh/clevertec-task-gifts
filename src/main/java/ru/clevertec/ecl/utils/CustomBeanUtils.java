@@ -2,13 +2,18 @@ package ru.clevertec.ecl.utils;
 
 import ru.clevertec.ecl.bean.GiftCertificate;
 import ru.clevertec.ecl.dao.GiftCertRepository;
+import ru.clevertec.ecl.dto.GiftCertificateDto;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class CustomBeanUtils {
-    public static void copyProperties(GiftCertificate giftCertificate, GiftCertificate giftCertificateFromDb) {
+
+    private CustomBeanUtils() {
+    }
+
+    public static void copyProperties(GiftCertificate giftCertificate, GiftCertificateDto giftCertificateFromDb) {
         if (giftCertificate.getName() != null) {
             giftCertificateFromDb.setName(giftCertificate.getName());
         }
@@ -53,14 +58,21 @@ public class CustomBeanUtils {
     }
 
     public static List<GiftCertificate> orderResultList(List<GiftCertificate> resultList, String sortByName, String sortByDate) {
-        Comparator<GiftCertificate> firstComparator = sortByName != null ?
-                ((o1, o2) -> ("desc".equalsIgnoreCase(sortByName) ? -1 : 1) * o1.getName().compareTo(o2.getName())) :
-                sortByDate != null ?
-                        (o1, o2) -> ("desc".equalsIgnoreCase(sortByDate) ? -1 : 1) * o1.getCreateDate().compareTo(o2.getCreateDate()) :
-                        Comparator.comparing(GiftCertificate::getId);
+        Comparator<GiftCertificate> firstComparator;
+        if (sortByName != null) {
+            firstComparator = ((o1, o2) -> ("desc".equalsIgnoreCase(sortByName) ? -1 : 1) * o1.getName().compareTo(o2.getName()));
+        } else {
+            if (sortByDate != null)
+                firstComparator = (o1, o2) -> ("desc".equalsIgnoreCase(sortByDate) ? -1 : 1) * o1.getCreateDate().compareTo(o2.getCreateDate());
+            else firstComparator = Comparator.comparing(GiftCertificate::getId);
+        }
 
         Comparator<GiftCertificate> secondComparator = sortByName != null ?
-                (o1, o2) -> ("desc".equalsIgnoreCase(sortByDate) ? -1 : 1) * o1.getCreateDate().compareTo(o2.getCreateDate()) :
+                (o1, o2) -> {
+                    if ("desc".equalsIgnoreCase(sortByDate))
+                        return -1 * o1.getCreateDate().compareTo(o2.getCreateDate());
+                    return o1.getCreateDate().compareTo(o2.getCreateDate());
+                } :
                 Comparator.comparing(GiftCertificate::getId);
 
         return resultList.stream()

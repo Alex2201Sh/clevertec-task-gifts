@@ -5,7 +5,6 @@ import ru.clevertec.ecl.bean.Tag;
 import java.util.List;
 
 public interface TagRepository {
-
     List<Tag> findAll();
 
     Tag findById(int id);
