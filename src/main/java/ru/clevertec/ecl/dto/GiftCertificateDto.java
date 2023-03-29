@@ -1,4 +1,4 @@
-package ru.clevertec.ecl.bean;
+package ru.clevertec.ecl.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +14,7 @@ import java.time.LocalDateTime;
 @Jacksonized
 @AllArgsConstructor
 @NoArgsConstructor
-public class GiftCertificate {
-
+public class GiftCertificateDto {
     private Integer id;
     private String name;
     private String description;

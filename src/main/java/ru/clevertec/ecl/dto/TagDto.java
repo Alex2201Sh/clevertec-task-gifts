@@ -1,9 +1,9 @@
-package ru.clevertec.ecl.bean;
+package ru.clevertec.ecl.dto;
 
 import lombok.Data;
 
 @Data
-public class Tag {
+public class TagDto {
     private Integer id;
     private String name;
 
