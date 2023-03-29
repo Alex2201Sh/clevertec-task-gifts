@@ -10,27 +10,27 @@ public class CustomBeanUtils {
 
     /**
      * Utility method for copying only not null parameters.
-     * @param giftCertificate - given Object
-     * @param giftCertificateFromDb - target Object
+     * @param giftCertificateSource - given Object
+     * @param giftCertificateDtoTarget - target Object
      */
-    public static void copyProperties(GiftCertificate giftCertificate, GiftCertificateDto giftCertificateFromDb) {
-        if (giftCertificate.getName() != null) {
-            giftCertificateFromDb.setName(giftCertificate.getName());
+    public static void copyProperties(GiftCertificate giftCertificateSource, GiftCertificateDto giftCertificateDtoTarget) {
+        if (giftCertificateSource.getName() != null) {
+            giftCertificateDtoTarget.setName(giftCertificateSource.getName());
         }
-        if (giftCertificate.getDescription() != null) {
-            giftCertificateFromDb.setDescription(giftCertificate.getDescription());
+        if (giftCertificateSource.getDescription() != null) {
+            giftCertificateDtoTarget.setDescription(giftCertificateSource.getDescription());
         }
-        if (giftCertificate.getPrice() != null) {
-            giftCertificateFromDb.setPrice(giftCertificate.getPrice());
+        if (giftCertificateSource.getPrice() != null) {
+            giftCertificateDtoTarget.setPrice(giftCertificateSource.getPrice());
         }
-        if (giftCertificate.getDuration() != null) {
-            giftCertificateFromDb.setDuration(giftCertificate.getDuration());
+        if (giftCertificateSource.getDuration() != null) {
+            giftCertificateDtoTarget.setDuration(giftCertificateSource.getDuration());
         }
-        if (giftCertificate.getCreateDate() != null) {
-            giftCertificateFromDb.setCreateDate(giftCertificate.getCreateDate());
+        if (giftCertificateSource.getCreateDate() != null) {
+            giftCertificateDtoTarget.setCreateDate(giftCertificateSource.getCreateDate());
         }
-        if (giftCertificate.getLastUpdateDate() != null) {
-            giftCertificateFromDb.setLastUpdateDate(giftCertificate.getLastUpdateDate());
+        if (giftCertificateSource.getLastUpdateDate() != null) {
+            giftCertificateDtoTarget.setLastUpdateDate(giftCertificateSource.getLastUpdateDate());
         }
     }
 

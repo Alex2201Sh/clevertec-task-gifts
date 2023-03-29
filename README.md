@@ -38,13 +38,13 @@ _(all requirements IMPLEMENTED in GiftController)_
 5. Use transactions where it’s necessary. _(IMPLEMENTED)_
 6. Java Code Convention is mandatory (exception: margin size – 120 chars). _(IMPLEMENTED)_
 7. Build tool: Gradle, latest version. _(IMPLEMENTED)_
-8. Web server: Apache Tomcat. _(NOT IMPLEMENTED)_
+8. Web server: Apache Tomcat. _(IMPLEMENTED)_
 9. Application container: Spring IoC. Spring Framework, the latest version. _(IMPLEMENTED)_
 10. Database: PostgreSQL, latest version. _(IMPLEMENTED)_
-11. Testing: JUnit 5.+, Mockito. _(NOT IMPLEMENTED)_
-12. Service layer should be covered with unit tests not less than 80%. _(NOT IMPLEMENTED)_
+11. Testing: JUnit 5.+, Mockito. _(IMPLEMENTED)_
+12. Service layer should be covered with unit tests not less than 80%. _(IMPLEMENTED)_
 13. Repository layer should be tested using integration tests with an in-memory embedded database (all operations with certificates). _(NOT IMPLEMENTED)_
-14. As a mapper use Mapstruct. _(NOT IMPLEMENTED)_
+14. As a mapper use Mapstruct. _(IMPLEMENTED)_
 15. Use lombok. _(IMPLEMENTED)_
 
 
@@ -52,7 +52,7 @@ _(all requirements IMPLEMENTED in GiftController)_
 1. Code should be clean and should not contain any “developer-purpose” constructions. _(IMPLEMENTED)_
 2. App should be designed and written with respect to OOD and SOLID principles. _(IMPLEMENTED)_
 3. Code should contain valuable comments where appropriate. _(IMPLEMENTED)_
-4. Public APIs should be documented (Javadoc). _(NOT IMPLEMENTED)_
+4. Public APIs should be documented (Javadoc). _(IMPLEMENTED)_
 5. Clear layered structure should be used with responsibilities of each application layer defined. _(IMPLEMENTED)_
 6. JSON should be used as a format of client-server communication messages. _(IMPLEMENTED)_
 7. Convenient error/exception handling mechanism should be implemented: all errors should be meaningful on backend side. Example: handle 404 error:
@@ -63,9 +63,9 @@ response body
 “errorCode”: 40401
 }
 where "errorCode" is your custom code (it can be based on http status and requested resource - certificate or tag)
-   _(NOT IMPLEMENTED)_
+   _(IMPLEMENTED)_
 8. Abstraction should be used everywhere to avoid code duplication. _(IMPLEMENTED)_
-9. Several configurations should be implemented (at least two - dev and prod). _(NOT IMPLEMENTED)_
+9. Several configurations should be implemented (at least two - dev and prod). _(IMPLEMENTED)_
 
 ### Application restrictions
 It is forbidden to use:
