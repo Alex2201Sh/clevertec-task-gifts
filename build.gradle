@@ -38,6 +38,7 @@ dependencies {
 
     //hibernate
     implementation 'org.hibernate:hibernate-core:5.6.15.Final'
+    implementation group: 'com.sun.el', name: 'el-ri', version: '3.0.4'
 
     war {
         archiveFileName = 'task-gifts.war'

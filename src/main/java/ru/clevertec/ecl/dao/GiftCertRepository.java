@@ -8,9 +8,9 @@ import java.util.List;
 public interface GiftCertRepository {
     List<GiftCertificate> findAll();
 
-    List<GiftCertificate> findByPartOfName(String partOnName);
+    List<GiftCertificate> findByPartOfName(String partOfName);
 
-    List<GiftCertificate> findByPartOfDescription(String partOnName);
+    List<GiftCertificate> findByPartOfDescription(String partOfDescription);
 
     List<GiftCertificate> findCertificateByTagName(String tagName);
 
