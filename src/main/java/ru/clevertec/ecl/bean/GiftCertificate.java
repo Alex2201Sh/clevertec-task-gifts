@@ -37,8 +37,8 @@ public class GiftCertificate implements BaseEntity<Integer>, Serializable {
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "certificate_tag",
-            joinColumns = {@JoinColumn(name = "tag_id")},
-            inverseJoinColumns = {@JoinColumn(name = "certificate_id")}
+            joinColumns = {@JoinColumn(name = "certificate_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tag_id")}
     )
-    private List<Tag> tagList = new ArrayList<>();
+    private List<Tag> tagList;
 }

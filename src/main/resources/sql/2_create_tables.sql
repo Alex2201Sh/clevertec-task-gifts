@@ -20,13 +20,17 @@ create table if not exists public.tags
     name varchar(32)
 );
 
-create table if not exists public.certificate_tag
+create table public.certificate_tag
 (
-    certificate_id integer,
-    tag_id         integer,
-    constraint certificate_tag_pk
-        primary key (certificate_id, tag_id)
+    tag_id         integer not null
+        constraint tag_id_fk
+            references public.tags,
+    certificate_id integer not null
+        constraint cert_id_pk
+            references public.gift_certificates
 );
+
+
 
 
 

@@ -1,16 +1,10 @@
 package ru.clevertec.ecl.service.impl;
 
 import org.junit.jupiter.api.*;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import ru.clevertec.ecl.dao.GiftCertRepository;
-import ru.clevertec.ecl.dao.hibernate.GiftCertRepositoryHibernateImpl;
-import ru.clevertec.ecl.dao.impl.GiftCertRepositoryImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.clevertec.ecl.dto.GiftCertificateDto;
 import ru.clevertec.ecl.exceptions.MyException;
-import ru.clevertec.ecl.mapper.GiftCertificateMapperImpl;
-import ru.clevertec.ecl.mapper.Mapper;
-import ru.clevertec.ecl.mapper.TagMapperImpl;
 import ru.clevertec.ecl.service.GiftCertificatesService;
 import ru.clevertec.ecl.test_builder.TestBuilder;
 
@@ -18,28 +12,16 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest
 class GiftCertificateServiceTest {
 
-    private static GiftCertificatesService service;
-    private static Integer testObjectId;
+    private final GiftCertificatesService service;
+    private Integer testObjectId;
+    private GiftCertificateDto testObject;
 
-    private static GiftCertificateDto testObject;
-
-    @BeforeAll
-    static void setUp() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/clevertec");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres");
-        JdbcTemplate template = new JdbcTemplate(dataSource);
-
-//        GiftCertRepository repository = new GiftCertRepositoryImpl(template);
-        GiftCertRepository repository = new GiftCertRepositoryHibernateImpl();
-
-        service = new GiftCertificateServiceImpl(
-                new Mapper(new TagMapperImpl(), new GiftCertificateMapperImpl()),
-                repository);
+    @Autowired
+    GiftCertificateServiceTest(GiftCertificatesService service) {
+        this.service = service;
     }
 
     @BeforeEach
@@ -76,7 +58,6 @@ class GiftCertificateServiceTest {
     }
 
     @Test
-    @Disabled()
     void findCertificateByTagName() {
         List<GiftCertificateDto> list = service.findCertificateByTagName("two");
         assertThat(list).isNotEmpty();

@@ -25,8 +25,8 @@ public class Tag implements BaseEntity<Integer> {
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "certificate_tag",
-            joinColumns = {@JoinColumn(name = "certificate_id")},
-            inverseJoinColumns = {@JoinColumn(name = "tag_id")}
+            joinColumns = {@JoinColumn(name = "tag_id")},
+            inverseJoinColumns = {@JoinColumn(name = "certificate_id")}
     )
-    private List<GiftCertificate> certificateLis = new ArrayList<>();
+    private List<GiftCertificate> certificateList = new ArrayList<>();
 }

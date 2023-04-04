@@ -1,15 +1,19 @@
 package ru.clevertec.ecl;
 
 import ru.clevertec.ecl.bean.GiftCertificate;
+import ru.clevertec.ecl.bean.Tag;
 import ru.clevertec.ecl.dao.hibernate.GiftCertRepositoryHibernateImpl;
+import ru.clevertec.ecl.exceptions.MyException;
 
 import java.util.List;
 
 public class MainHibernate {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MyException {
         GiftCertRepositoryHibernateImpl repo = new GiftCertRepositoryHibernateImpl();
-        List<GiftCertificate> all = repo.findByPartOfName("abc");
-        System.err.println(all);
+        GiftCertificate byId = repo.findById(2);
+        List<Tag> tagList = byId.getTagList();
+//        List<Tag> tagListByCertificateId = repo.getTagListByCertificateId(2);
+        System.err.println(tagList);
 
 
 //        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
