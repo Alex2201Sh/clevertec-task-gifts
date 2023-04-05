@@ -36,6 +36,10 @@ dependencies {
     compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
     implementation 'org.hibernate.validator:hibernate-validator:6.1.6.Final'
 
+    //hibernate
+    implementation 'org.hibernate:hibernate-core:5.6.15.Final'
+    implementation group: 'com.sun.el', name: 'el-ri', version: '3.0.4'
+
     war {
         archiveFileName = 'task-gifts.war'
         final String targetDir = System.getenv('CATALINA_HOME')

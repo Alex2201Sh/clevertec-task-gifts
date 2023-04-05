@@ -1,18 +1,10 @@
 package ru.clevertec.ecl.service.impl;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import ru.clevertec.ecl.dao.GiftCertRepository;
-import ru.clevertec.ecl.dao.impl.GiftCertRepositoryImpl;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.clevertec.ecl.dto.GiftCertificateDto;
 import ru.clevertec.ecl.exceptions.MyException;
-import ru.clevertec.ecl.mapper.GiftCertificateMapperImpl;
-import ru.clevertec.ecl.mapper.Mapper;
-import ru.clevertec.ecl.mapper.TagMapperImpl;
 import ru.clevertec.ecl.service.GiftCertificatesService;
 import ru.clevertec.ecl.test_builder.TestBuilder;
 
@@ -20,27 +12,15 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest
 class GiftCertificateServiceTest {
 
-    private static GiftCertificatesService service;
-    private static Integer testObjectId;
+    private final GiftCertificatesService service;
+    private GiftCertificateDto testObject;
 
-    private static GiftCertificateDto testObject;
-
-    @BeforeAll
-    static void setUp() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/clevertec");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres");
-        JdbcTemplate template = new JdbcTemplate(dataSource);
-
-        GiftCertRepository repository = new GiftCertRepositoryImpl(template);
-
-        service = new GiftCertificateServiceImpl(
-                new Mapper(new TagMapperImpl(), new GiftCertificateMapperImpl()),
-                repository);
+    @Autowired
+    GiftCertificateServiceTest(GiftCertificatesService service) {
+        this.service = service;
     }
 
     @BeforeEach
@@ -48,13 +28,12 @@ class GiftCertificateServiceTest {
         testObject = service.save(TestBuilder.giftCertificateDtoBuilder()
                 .setName("testObject")
                 .build());
-        testObjectId = testObject.getId();
     }
 
     @AfterEach
     void cleanUp() {
-        if (testObjectId != null) {
-            service.delete(testObjectId);
+        if (testObject != null) {
+            service.delete(testObject.getId());
         }
     }
 
@@ -78,13 +57,13 @@ class GiftCertificateServiceTest {
 
     @Test
     void findCertificateByTagName() {
-        List<GiftCertificateDto> list = service.findCertificateByTagName("two");
+        List<GiftCertificateDto> list = service.findCertificateByTagName("one");
         assertThat(list).isNotEmpty();
     }
 
     @Test
     void findById() throws MyException {
-        GiftCertificateDto byId = service.findById(testObjectId);
+        GiftCertificateDto byId = service.findById(testObject.getId());
         assertThat(byId).isEqualTo(testObject);
     }
 }

@@ -1,26 +1,54 @@
 package ru.clevertec.ecl.bean;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import lombok.extern.jackson.Jacksonized;
-import org.postgresql.util.PGInterval;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
+@ToString(exclude = "tagList")
+@EqualsAndHashCode(exclude = "tagList")
 @Builder(builderMethodName = "aCertificateDto", toBuilder = true, setterPrefix = "set")
 @Jacksonized
 @AllArgsConstructor
 @NoArgsConstructor
-public class GiftCertificate {
-
+@Entity
+@Table(name = "gift_certificates")
+public class GiftCertificate implements BaseEntity<Integer>, Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(length = 32)
     private String name;
+    @Column(length = 128)
     private String description;
     private Float price;
-    private PGInterval duration;
+    private Duration duration;
+    @Column(name = "create_date")
     private LocalDateTime createDate;
+    @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "certificate_tag",
+            joinColumns = {@JoinColumn(name = "certificate_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tag_id")}
+    )
+    @JsonIgnore
+    private List<Tag> tagList = new ArrayList<>();
+
+    public List<Tag> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<Tag> tagList) {
+        this.tagList = tagList;
+    }
 }
