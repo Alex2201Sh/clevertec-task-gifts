@@ -148,22 +148,4 @@ public class GiftCertRepositoryHibernateImpl implements GiftCertRepository {
             return resultList;
         }
     }
-
-//    private List<Tag> getTagListByCertificateId(int certificateId) {
-//        try (Session session = sessionFactory.openSession()) {
-//            session.getTransaction().begin();
-//            Query<Tag> query = session.createQuery(
-//                    "SELECT t from Tag t where id " +
-//                            "IN (SELECT cl.id FROM t.certificateList cl WHERE cl.id = " +
-//                            "(SELECT gc.id FROM GiftCertificate gc WHERE id = :CID))",
-//                    Tag.class);
-//            query.setParameter("CID", certificateId);
-//            List<Tag> resultList = query.getResultList();
-////            resultList.forEach(giftCertificate ->
-////                    giftCertificate.setTagList(
-////                            getTagListByCertificateId(giftCertificate.getId())));
-//            session.getTransaction().commit();
-//            return resultList;
-//        }
-//    }
 }

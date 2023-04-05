@@ -28,5 +28,5 @@ public class Tag implements BaseEntity<Integer> {
             joinColumns = {@JoinColumn(name = "tag_id")},
             inverseJoinColumns = {@JoinColumn(name = "certificate_id")}
     )
-    private List<GiftCertificate> certificateList = new ArrayList<>();
+    private List<GiftCertificate> certificateList;
 }
