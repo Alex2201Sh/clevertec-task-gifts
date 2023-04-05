@@ -12,7 +12,6 @@ import ru.clevertec.ecl.exceptions.MyException;
 import ru.clevertec.ecl.utils.HibernateUtil;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -24,14 +23,12 @@ public class GiftCertRepositoryHibernateImpl implements GiftCertRepository {
     @Override
     public List<GiftCertificate> findAll() {
         try (Session session = sessionFactory.openSession()) {
-            session.getTransaction().begin();
             List<GiftCertificate> resultList = session.createQuery("SELECT a FROM GiftCertificate a",
                     GiftCertificate.class).getResultList();
             resultList.forEach(giftCertificate ->
                     giftCertificate.setTagList(getTagListByCertificateId(
                             giftCertificate.getId()
                     )));
-            session.getTransaction().commit();
             return resultList;
         }
     }
@@ -39,7 +36,6 @@ public class GiftCertRepositoryHibernateImpl implements GiftCertRepository {
     @Override
     public List<GiftCertificate> findByPartOfName(String partOfName) {
         try (Session session = sessionFactory.openSession()) {
-            session.getTransaction().begin();
             Query<GiftCertificate> query = session.createQuery(
                     "SELECT a FROM GiftCertificate a WHERE name LIKE concat('%',:PN,'%')",
                     GiftCertificate.class);
@@ -49,7 +45,6 @@ public class GiftCertRepositoryHibernateImpl implements GiftCertRepository {
                     giftCertificate.setTagList(getTagListByCertificateId(
                             giftCertificate.getId()
                     )));
-            session.getTransaction().commit();
             return resultList;
         }
 
@@ -58,7 +53,6 @@ public class GiftCertRepositoryHibernateImpl implements GiftCertRepository {
     @Override
     public List<GiftCertificate> findByPartOfDescription(String partOfDescription) {
         try (Session session = sessionFactory.openSession()) {
-            session.getTransaction().begin();
             Query<GiftCertificate> query = session.createQuery(
                     "SELECT a FROM GiftCertificate a WHERE description LIKE concat('%',:PN,'%')",
                     GiftCertificate.class);
@@ -68,7 +62,6 @@ public class GiftCertRepositoryHibernateImpl implements GiftCertRepository {
                     giftCertificate.setTagList(getTagListByCertificateId(
                             giftCertificate.getId()
                     )));
-            session.getTransaction().commit();
             return resultList;
         }
     }
@@ -76,18 +69,18 @@ public class GiftCertRepositoryHibernateImpl implements GiftCertRepository {
     @Override
     public List<GiftCertificate> findCertificateByTagName(String tagName) {
         try (Session session = sessionFactory.openSession()) {
-            session.getTransaction().begin();
-            Query<GiftCertificate> query = session.createQuery(
-                    "SELECT gc from GiftCertificate gc where id " +
-                            "IN (SELECT tl.id FROM gc.tagList tl WHERE tl.id = " +
-                            "(SELECT t.id FROM Tag t WHERE name = :TN))",
-                    GiftCertificate.class);
+            Query<Tag> query = session.createQuery("SELECT t FROM Tag t WHERE name = :TN", Tag.class);
             query.setParameter("TN", tagName);
-            List<GiftCertificate> resultList = query.getResultList();
+            Tag tagByName = query.uniqueResult();
+
+            Query query2 = session.createQuery(
+                    "SELECT t.certificateList FROM Tag t WHERE t.id = :TID");
+            query2.setParameter("TID", tagByName.getId());
+            List<GiftCertificate> resultList = (List<GiftCertificate>) query2.getResultList();
             resultList.forEach(giftCertificate ->
-                    giftCertificate.setTagList(
-                            getTagListByCertificateId(giftCertificate.getId())));
-            session.getTransaction().commit();
+                    giftCertificate.setTagList(getTagListByCertificateId(
+                            giftCertificate.getId()
+                    )));
             return resultList;
         }
     }
@@ -131,21 +124,10 @@ public class GiftCertRepositoryHibernateImpl implements GiftCertRepository {
 
     private List<Tag> getTagListByCertificateId(int certificateId) {
         try (Session session = sessionFactory.openSession()) {
-            session.getTransaction().begin();
-            Query<Integer> innerQuery = session.createQuery(
-                    "SELECT gc.id FROM GiftCertificate gc WHERE id = :CID", Integer.class);
-            innerQuery.setParameter("CID", certificateId);
-            List<Integer> tagListIds = innerQuery.getResultList();
-            List<Tag> resultList = new ArrayList<>();
-            tagListIds.stream().forEach(integer -> {
-                Query<Tag> query = session.createQuery(
-                        "SELECT t from Tag t where id = :TID",
-                        Tag.class);
-                query.setParameter("TID", integer);
-                resultList.add(query.uniqueResult());
-            });
-            session.getTransaction().commit();
-            return resultList;
+            Query query = session.createQuery(
+                    "SELECT gc.tagList FROM GiftCertificate gc WHERE gc.id = :CID");
+            query.setParameter("CID", certificateId);
+            return query.getResultList();
         }
     }
 }

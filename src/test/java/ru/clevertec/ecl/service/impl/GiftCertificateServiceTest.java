@@ -16,7 +16,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GiftCertificateServiceTest {
 
     private final GiftCertificatesService service;
-    private Integer testObjectId;
     private GiftCertificateDto testObject;
 
     @Autowired
@@ -29,13 +28,12 @@ class GiftCertificateServiceTest {
         testObject = service.save(TestBuilder.giftCertificateDtoBuilder()
                 .setName("testObject")
                 .build());
-        testObjectId = testObject.getId();
     }
 
     @AfterEach
     void cleanUp() {
-        if (testObjectId != null) {
-            service.delete(testObjectId);
+        if (testObject != null) {
+            service.delete(testObject.getId());
         }
     }
 
@@ -59,13 +57,13 @@ class GiftCertificateServiceTest {
 
     @Test
     void findCertificateByTagName() {
-        List<GiftCertificateDto> list = service.findCertificateByTagName("two");
+        List<GiftCertificateDto> list = service.findCertificateByTagName("one");
         assertThat(list).isNotEmpty();
     }
 
     @Test
     void findById() throws MyException {
-        GiftCertificateDto byId = service.findById(testObjectId);
+        GiftCertificateDto byId = service.findById(testObject.getId());
         assertThat(byId).isEqualTo(testObject);
     }
 }

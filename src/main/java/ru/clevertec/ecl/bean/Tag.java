@@ -1,12 +1,12 @@
 package ru.clevertec.ecl.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -28,5 +28,6 @@ public class Tag implements BaseEntity<Integer> {
             joinColumns = {@JoinColumn(name = "tag_id")},
             inverseJoinColumns = {@JoinColumn(name = "certificate_id")}
     )
+    @JsonIgnore
     private List<GiftCertificate> certificateList;
 }

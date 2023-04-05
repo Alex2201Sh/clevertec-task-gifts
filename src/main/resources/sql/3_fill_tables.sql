@@ -29,7 +29,7 @@ VALUES (1, 'one'),
 INSERT INTO public.certificate_tag (certificate_id, tag_id)
 VALUES (1, 1),
        (1, 2),
-       (2, 3),
+       (1, 3),
        (4, 4),
        (5, 5),
        (6, 5),
