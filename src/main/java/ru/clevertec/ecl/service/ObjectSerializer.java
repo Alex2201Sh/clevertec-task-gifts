@@ -11,12 +11,19 @@ import ru.clevertec.ecl.dto.GiftCertificateDto;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Locale;
 
 @Component
 public class ObjectSerializer {
     public static final SimpleDateFormat df =
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+    public String arrayOfObjectsToJson(Object... objects){
+        StringBuilder stringBuilder = new StringBuilder();
+        Arrays.asList(objects).forEach(o -> stringBuilder.append(objectToJson(o)));
+        return stringBuilder.toString();
+    }
 
     public String objectToJson(Object object) {
         try {

@@ -37,3 +37,16 @@ VALUES (1, 1),
        (8, 7),
        (8, 8);
 
+INSERT INTO public.users (id, username)
+VALUES (1, 'first user'),
+       (2, 'second user'),
+       (3, 'third user');
+
+INSERT INTO public.users_gift_certificates (user_id, certificate_id)
+VALUES (1, 1),
+       (1, 2),
+       (2, 3),
+       (2, 4),
+       (3, 5),
+       (3, 6);
+

@@ -29,3 +29,20 @@ create table public.certificate_tag
         constraint cert_id_pk
             references public.gift_certificates
 );
+
+create table public.users
+(
+    id       serial
+        primary key,
+    username varchar(255)
+);
+
+create table public.users_gift_certificates
+(
+    user_id            integer not null
+        constraint user_id_fk
+            references public.users,
+    certificate_id integer not null
+        constraint certificate_id_fk
+            references public.gift_certificates
+);
