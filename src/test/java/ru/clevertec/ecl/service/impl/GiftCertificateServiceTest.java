@@ -57,7 +57,7 @@ class GiftCertificateServiceTest {
 
     @Test
     void findCertificateByTagName() {
-        List<GiftCertificateDto> list = service.findCertificateByTagName("one");
+        List<GiftCertificateDto> list = service.findCertificateByTagName("five");
         assertThat(list).isNotEmpty();
     }
 

@@ -18,7 +18,7 @@ public interface GiftCertificatesService {
 
     GiftCertificateDto save(GiftCertificateDto giftCertificateDto);
 
-    int delete(int id);
+    void delete(int id);
 
     List<GiftCertificateDto> filterGiftCertificatesList(String tagName,
                                                         String certName,

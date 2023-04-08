@@ -3,10 +3,9 @@ package ru.clevertec.ecl.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.clevertec.ecl.bean.Tag;
-import ru.clevertec.ecl.dao.TagRepository;
 import ru.clevertec.ecl.dto.TagDto;
-import ru.clevertec.ecl.exceptions.MyException;
 import ru.clevertec.ecl.mapper.Mapper;
+import ru.clevertec.ecl.repository.TagRepository;
 import ru.clevertec.ecl.service.TagService;
 
 import java.util.ArrayList;
@@ -41,9 +40,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagDto findById(int id) throws MyException {
-        Tag byId = repository.findById(id);
-        byId.setCertificateList(new ArrayList<>());
+    public TagDto findById(int id) {
+        Tag byId = repository.findById(id).orElse(null);
+        if (byId != null) {
+            byId.setCertificateList(new ArrayList<>());
+        }
         return mapper.convert(byId);
     }
 
@@ -55,7 +56,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public int delete(int id) {
-        return repository.delete(id);
+    public void delete(int id) {
+        repository.deleteById(id);
     }
 }

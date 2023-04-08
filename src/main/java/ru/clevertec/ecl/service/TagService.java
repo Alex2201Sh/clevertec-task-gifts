@@ -14,5 +14,5 @@ public interface TagService {
 
     TagDto save(TagDto tagDto);
 
-    int delete(int id);
+    void delete(int id);
 }

@@ -1,10 +1,10 @@
 package ru.clevertec.ecl.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
