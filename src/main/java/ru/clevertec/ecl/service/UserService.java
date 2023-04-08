@@ -12,7 +12,7 @@ public interface UserService {
 
     List<GiftCertificate> getGiftCertificatesByUser(User user);
 
-    User createOrder(User user, GiftCertificate giftCertificate);
+    User createOrder(User user, Integer giftCertificateId);
 
     GiftCertificate getOrder(User user, Integer orderId);
 }

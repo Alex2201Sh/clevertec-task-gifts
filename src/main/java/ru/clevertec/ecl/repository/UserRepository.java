@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.ecl.bean.User;
 
 @Repository
-@Transactional
-public interface UserRepository extends JpaRepository<User,Integer> {
-
+@Transactional(readOnly = true)
+public interface UserRepository extends JpaRepository<User, Integer> {
 }

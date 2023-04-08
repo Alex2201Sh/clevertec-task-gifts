@@ -38,8 +38,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createOrder(User user, GiftCertificate giftCertificate) {
-        user.addCertificate(giftCertificate);
+    public User createOrder(User user, Integer giftCertificateId) {
+        user.addCertificate(giftCertRepository.findById(giftCertificateId).orElse(null));
         return userRepository.save(user);
     }
 
