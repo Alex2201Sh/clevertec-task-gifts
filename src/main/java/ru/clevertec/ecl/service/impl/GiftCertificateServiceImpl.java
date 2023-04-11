@@ -51,7 +51,7 @@ public class GiftCertificateServiceImpl implements GiftCertificatesService {
         return byTagName.stream().map(mapper::convert).toList();
     }
 
-    public GiftCertificateDto findById(int id) throws MyException {
+    public GiftCertificateDto findById(int id) {
         return mapper.convert(repository.findById(id).orElse(null));
     }
 

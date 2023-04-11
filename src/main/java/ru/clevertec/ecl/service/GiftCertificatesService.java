@@ -14,7 +14,7 @@ public interface GiftCertificatesService {
 
     List<GiftCertificateDto> findCertificateByTagName(String tagName);
 
-    GiftCertificateDto findById(int id) throws MyException;
+    GiftCertificateDto findById(int id);
 
     GiftCertificateDto save(GiftCertificateDto giftCertificateDto);
 

@@ -1,6 +1,7 @@
 package ru.clevertec.ecl.service;
 
 import ru.clevertec.ecl.bean.GiftCertificate;
+import ru.clevertec.ecl.bean.Order;
 import ru.clevertec.ecl.bean.User;
 
 import java.util.List;
@@ -10,9 +11,9 @@ public interface UserService {
 
     User getUserById(Integer id);
 
-    List<GiftCertificate> getGiftCertificatesByUser(User user);
+    List<Order> getOrdersByUser(User user);
 
-    User createOrder(User user, Integer giftCertificateId);
+    User createOrder(User user, List<GiftCertificate> certificateList);
 
-    GiftCertificate getOrder(User user, Integer orderId);
+    Order getOrder(Integer orderId);
 }

@@ -12,8 +12,8 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString(exclude = "certificateList")
-@EqualsAndHashCode(exclude = "certificateList")
+@ToString(exclude = "orderList")
+@EqualsAndHashCode(exclude = "orderList")
 @Entity
 @Table(name = "users")
 public class User {
@@ -25,15 +25,15 @@ public class User {
     private String username;
     @OneToMany
     @JoinTable(
-            name = "users_gift_certificates",
+            name = "users_orders",
             joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "certificate_id")}
+            inverseJoinColumns = {@JoinColumn(name = "order_id")}
     )
     @JsonIgnore
-    private List<GiftCertificate> certificateList = new ArrayList<>();
+    private List<Order> orderList = new ArrayList<>();
 
-    public void addCertificate(GiftCertificate certificate){
-        certificateList.add(certificate);
+    public void addOrder(Order order){
+        orderList.add(order);
     }
 
 }

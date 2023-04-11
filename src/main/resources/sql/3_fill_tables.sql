@@ -42,7 +42,7 @@ VALUES (1, 'first user'),
        (2, 'second user'),
        (3, 'third user');
 
-INSERT INTO public.users_gift_certificates (user_id, certificate_id)
+INSERT INTO public.users_orders (user_id, order_id)
 VALUES (1, 1),
        (1, 2),
        (2, 3),

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.clevertec.ecl.bean.GiftCertificate;
+import ru.clevertec.ecl.bean.Order;
 import ru.clevertec.ecl.bean.User;
 import ru.clevertec.ecl.dto.GiftCertificateDto;
 import ru.clevertec.ecl.service.ObjectSerializer;
@@ -16,6 +17,7 @@ import ru.clevertec.ecl.service.impl.UserServiceImpl;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
@@ -43,25 +45,39 @@ public class UserController {
     public ResponseEntity<String> getUserById(@PathVariable("id") int id) {
         HttpHeaders headers = new HttpHeaders();
         User userById = service.getUserById(id);
-        List<GiftCertificate> giftCertificatesByUser = service.getGiftCertificatesByUser(userById);
+        List<Order> ordersByUser = service.getOrdersByUser(userById);
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(serializer.objectToJson(
-                new Object[]{userById, giftCertificatesByUser}),
-                headers, HttpStatus.OK);
+                new Object[]{userById, ordersByUser
+                }), headers, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<String> createGiftCertificate(@PathVariable("id") int id,
-                                                        @RequestBody GiftCertificateDto giftCertificateDto) {
+    @GetMapping("/{id}/orders")
+    public ResponseEntity<String> getUserOrders(@PathVariable("id") int id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        List<Order> orderList = service.getUserById(id).getOrderList();
+        List<GiftCertificate> collect = orderList.stream().flatMap(order -> order.getCertificateList().stream()).collect(Collectors.toList());
+        return new ResponseEntity<>(serializer.objectToJson(collect),
+                headers,
+                HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/orders")
+    public ResponseEntity<String> createOrder(@PathVariable("id") int id,
+                                              @RequestBody List<GiftCertificate> list) {
+
         User userById = service.getUserById(id);
-        User savedUserWithOrder = service.createOrder(userById, giftCertificateDto.getId());
+
+        User savedUserWithOrder = service.createOrder(userById, list);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{id}")
                 .buildAndExpand(id).toUri();
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return
+                ResponseEntity.status(HttpStatus.CREATED)
                 .location(uri)
                 .body(serializer.objectToJson(
                         new Object[]{savedUserWithOrder,
-                                savedUserWithOrder.getCertificateList()}));
+                                savedUserWithOrder.getOrderList()}));
     }
 }
