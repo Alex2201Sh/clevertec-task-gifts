@@ -23,6 +23,7 @@ public class Order {
 
     private Float cost;
 
+    @Column(name = "purchase_time_stamp")
     private LocalDateTime purchaseTimeStamp;
 
     @ManyToOne

@@ -37,12 +37,38 @@ create table public.users
     username varchar(255)
 );
 
-create table public.users_gift_certificates
+create table public.orders
 (
-    user_id            integer not null
+    id                serial
+        primary key,
+    cost              real,
+    purchase_time_stamp timestamp(6),
+    user_id           integer
+        constraint user_id_pk
+            references public.users
+);
+
+
+create table public.users_orders
+(
+    user_id  integer not null
         constraint user_id_fk
             references public.users,
-    certificate_id integer not null
-        constraint certificate_id_fk
+    order_id integer not null
+        constraint order_id_unique
+            unique
+        constraint order_id_fk
+            references public.orders
+);
+
+create table public.orders_gift_certificates
+(
+    order_id           integer not null
+        constraint order_id_fk
+            references public.orders,
+    certificatelist_id integer not null
+        constraint gift_certificate_id_unique
+            unique
+        constraint gift_certificate_id_fk
             references public.gift_certificates
 );

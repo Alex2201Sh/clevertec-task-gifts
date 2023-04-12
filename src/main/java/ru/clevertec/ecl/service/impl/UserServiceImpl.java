@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clevertec.ecl.bean.GiftCertificate;
 import ru.clevertec.ecl.bean.Order;
+import ru.clevertec.ecl.bean.Tag;
 import ru.clevertec.ecl.bean.User;
 import ru.clevertec.ecl.repository.GiftCertRepository;
 import ru.clevertec.ecl.repository.UserRepository;
@@ -11,7 +12,11 @@ import ru.clevertec.ecl.service.OrderService;
 import ru.clevertec.ecl.service.UserService;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class UserServiceImpl implements UserService {
@@ -64,7 +69,43 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Order getOrder(Integer orderId) {
-        return null;
+    public List<Tag> getMostWidelyUsedTagWithHighestCost(Integer userId) {
+
+        List<Order> orderList = getUserById(userId).getOrderList();
+
+        List<Tag> tagList = orderList
+                .stream()
+                .flatMap(order -> order.getCertificateList()
+                        .stream())
+                .flatMap(giftCertificate -> giftCertificate.getTagList()
+                        .stream())
+                .toList();
+
+        Map<Tag, Long> countMap = tagList.stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        Long maxTagCount = countMap.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getValue)
+                .orElse(0L);
+
+        List<Tag> widelyUsedTags = countMap.entrySet().stream()
+                .filter(e -> e.getValue().equals(maxTagCount))
+                .map(Map.Entry::getKey)
+                .toList();
+
+        return widelyUsedTags.stream().filter(tag -> {
+                    Order order1 = orderList.stream().filter(order ->
+                                    order.getCertificateList().stream()
+                                            .flatMap(giftCertificate -> giftCertificate.getTagList().stream())
+                                            .toList().contains(tag))
+                            .max(Comparator.comparing(Order::getCost))
+                            .get();
+                    List<Tag> collect = order1.getCertificateList()
+                            .stream().flatMap(giftCertificate -> giftCertificate.getTagList().stream())
+                            .toList();
+                    return collect.contains(tag);
+                }
+        ).toList();
     }
 }

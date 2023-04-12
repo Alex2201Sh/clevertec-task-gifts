@@ -2,6 +2,7 @@ package ru.clevertec.ecl.service;
 
 import ru.clevertec.ecl.bean.GiftCertificate;
 import ru.clevertec.ecl.bean.Order;
+import ru.clevertec.ecl.bean.Tag;
 import ru.clevertec.ecl.bean.User;
 
 import java.util.List;
@@ -15,5 +16,5 @@ public interface UserService {
 
     User createOrder(User user, List<GiftCertificate> certificateList);
 
-    Order getOrder(Integer orderId);
+    List<Tag> getMostWidelyUsedTagWithHighestCost(Integer userId);
 }

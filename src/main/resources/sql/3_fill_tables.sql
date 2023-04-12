@@ -26,21 +26,42 @@ VALUES (1, 'one'),
        (12, 'twelve');
 
 
-INSERT INTO public.certificate_tag (certificate_id, tag_id)
-VALUES (1, 1),
-       (1, 2),
-       (1, 3),
+INSERT INTO public.certificate_tag (tag_id, certificate_id)
+VALUES (9, 2),
+       (10, 3),
        (4, 4),
        (5, 5),
-       (6, 5),
-       (7, 6),
-       (8, 7),
-       (8, 8);
+       (5, 6),
+       (6, 7),
+       (7, 8),
+       (8, 8),
+       (1, 1),
+       (2, 1),
+       (3, 1);
+
 
 INSERT INTO public.users (id, username)
 VALUES (1, 'first user'),
        (2, 'second user'),
        (3, 'third user');
+
+INSERT INTO public.orders (id, cost, purchase_time_stamp, user_id)
+VALUES (4, 7, '2023-04-12 17:55:43.000000', 1),
+       (2, 8, '2023-04-12 17:55:40.000000', 2),
+       (5, 6, '2023-04-12 17:55:44.000000', 2),
+       (6, 8, '2023-04-12 17:55:45.000000', 3),
+       (3, 9, '2023-04-12 17:55:42.000000', 3),
+       (1, 17, '2023-04-12 17:55:39.000000', 1);
+
+INSERT INTO public.orders_gift_certificates (order_id, certificatelist_id)
+VALUES (1, 1),
+       (2, 2),
+       (3, 3),
+       (4, 4),
+       (5, 5),
+       (6, 6);
+
+
 
 INSERT INTO public.users_orders (user_id, order_id)
 VALUES (1, 1),

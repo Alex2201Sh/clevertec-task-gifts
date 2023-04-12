@@ -1,6 +1,5 @@
 package ru.clevertec.ecl.bean;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;
@@ -41,7 +40,6 @@ public class GiftCertificate implements BaseEntity<Integer>, Serializable {
             joinColumns = {@JoinColumn(name = "certificate_id")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id")}
     )
-    @JsonIgnore
     private List<Tag> tagList = new ArrayList<>();
 
     public List<Tag> getTagList() {

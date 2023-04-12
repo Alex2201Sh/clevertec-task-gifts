@@ -9,15 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.clevertec.ecl.bean.GiftCertificate;
 import ru.clevertec.ecl.bean.Order;
+import ru.clevertec.ecl.bean.Tag;
 import ru.clevertec.ecl.bean.User;
-import ru.clevertec.ecl.dto.GiftCertificateDto;
 import ru.clevertec.ecl.service.ObjectSerializer;
 import ru.clevertec.ecl.service.UserService;
 import ru.clevertec.ecl.service.impl.UserServiceImpl;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
@@ -57,8 +56,28 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         List<Order> orderList = service.getUserById(id).getOrderList();
-        List<GiftCertificate> collect = orderList.stream().flatMap(order -> order.getCertificateList().stream()).collect(Collectors.toList());
-        return new ResponseEntity<>(serializer.objectToJson(collect),
+        return new ResponseEntity<>(serializer.objectToJson(orderList),
+                headers,
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/orders/{orderId}")
+    public ResponseEntity<String> getUserOrderByOrderId(@PathVariable("userId") int userId,
+                                                   @PathVariable("orderId") int orderId) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        List<Order> orderList = service.getUserById(userId).getOrderList();
+        Order order1 = orderList.stream().filter(order -> order.getId().equals(orderId)).findFirst().orElse(null);
+        return new ResponseEntity<>(serializer.objectToJson(order1),
+                headers,
+                HttpStatus.OK);
+    }
+    @GetMapping("/{id}/orders/widely_used_tag")
+    public ResponseEntity<String> getWidelyUsedTag(@PathVariable("id") int id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        List<Tag> result = service.getMostWidelyUsedTagWithHighestCost(id);
+        return new ResponseEntity<>(serializer.objectToJson(result),
                 headers,
                 HttpStatus.OK);
     }
@@ -75,9 +94,9 @@ public class UserController {
                 .buildAndExpand(id).toUri();
         return
                 ResponseEntity.status(HttpStatus.CREATED)
-                .location(uri)
-                .body(serializer.objectToJson(
-                        new Object[]{savedUserWithOrder,
-                                savedUserWithOrder.getOrderList()}));
+                        .location(uri)
+                        .body(serializer.objectToJson(
+                                new Object[]{savedUserWithOrder,
+                                        savedUserWithOrder.getOrderList()}));
     }
 }

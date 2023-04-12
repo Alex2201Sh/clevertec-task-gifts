@@ -105,7 +105,32 @@ URL http://localhost:8080/gifts?tag_name=two&cert_name=se&description=abc&sort_b
 4. then sorted by GiftCertificates name
 5. then sorted by GiftCertificates createDate in reverse order
 
+</details>
+
+
+# **Task 2 - Advanced**
+<details>
+  <summary>Task</summary>
+
+### Business requirements
+
+1. Change single field of gift certificate (e.g. implement the possibility to change only duration of a certificate or only price). 
+_IMPLEMENTED in [GiftCertificateController.java](src%2Fmain%2Fjava%2Fru%2Fclevertec%2Fecl%2Fcontroller%2FGiftCertificateController.java) 
+with HTTP PATCH method_
+2. Add new entity User. _IMPLEMENTED [User.java](src%2Fmain%2Fjava%2Fru%2Fclevertec%2Fecl%2Fbean%2FUser.java)_
+* implement only get operations for user entity. _IMPLEMENTED_
+3. Make an order on gift certificate for a user (user should have an ability to buy a certificate). _IMPLEMENTED_
+4. Get information about user’s orders. 
+_IMPLEMENTED with endpoint http://localhost:8080/users/{id}/orders_
+5. Get information about user’s order: cost and timestamp of a purchase. 
+_IMPLEMENTED with endpoint http://localhost:8080/users/{userId}/orders/{orderId}_
+* The order cost should not be changed if the price of the gift certificate is changed. _IMPLEMENTED_
+6. Get the most widely used tag of a user with the highest cost of all orders. _IMPLEMENTED_
+* Create separate endpoint for this query. 
+_IMPLEMENTED http://localhost:8080/users/2/orders/widely_used_tag_
+* Demonstrate SQL execution plan for this query (explain). _NOT IMPLEMENTED_
+7. Search for gift certificates by several tags (“and” condition). _NOT IMPLEMENTED_
+8. Pagination should be implemented for all GET endpoints. Please, create a flexible and non-erroneous solution. Handle all exceptional cases. _NOT IMPLEMENTED_
 
 
 </details>
-
