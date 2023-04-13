@@ -10,7 +10,7 @@ public interface TagService {
 
     TagDto findByName(String name);
 
-    TagDto findById(int id) throws MyException;
+    TagDto findById(int id);
 
     TagDto save(TagDto tagDto);
 

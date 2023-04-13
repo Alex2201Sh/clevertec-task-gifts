@@ -1,7 +1,6 @@
 package ru.clevertec.ecl.service;
 
 import ru.clevertec.ecl.dto.GiftCertificateDto;
-import ru.clevertec.ecl.exceptions.MyException;
 
 import java.util.List;
 

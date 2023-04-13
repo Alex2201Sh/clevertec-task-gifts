@@ -9,15 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.clevertec.ecl.bean.GiftCertificate;
 import ru.clevertec.ecl.dto.GiftCertificateDto;
-import ru.clevertec.ecl.exceptions.MyException;
 import ru.clevertec.ecl.service.ObjectSerializer;
 import ru.clevertec.ecl.service.impl.GiftCertificateServiceImpl;
 import ru.clevertec.ecl.utils.CustomBeanUtils;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/gifts")

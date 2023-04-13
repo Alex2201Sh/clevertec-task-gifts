@@ -62,7 +62,7 @@ class GiftCertificateServiceTest {
     }
 
     @Test
-    void findById() throws MyException {
+    void findById(){
         GiftCertificateDto byId = service.findById(testObject.getId());
         assertThat(byId).isEqualTo(testObject);
     }

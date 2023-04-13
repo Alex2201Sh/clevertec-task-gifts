@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.ecl.bean.GiftCertificate;
 import ru.clevertec.ecl.dto.GiftCertificateDto;
-import ru.clevertec.ecl.exceptions.MyException;
 import ru.clevertec.ecl.mapper.Mapper;
 import ru.clevertec.ecl.repository.GiftCertRepository;
 import ru.clevertec.ecl.service.GiftCertificatesService;
