@@ -2,11 +2,11 @@ package ru.clevertec.ecl.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.ecl.bean.GiftCertificate;
-import ru.clevertec.ecl.dao.GiftCertRepository;
 import ru.clevertec.ecl.dto.GiftCertificateDto;
-import ru.clevertec.ecl.exceptions.MyException;
 import ru.clevertec.ecl.mapper.Mapper;
+import ru.clevertec.ecl.repository.GiftCertRepository;
 import ru.clevertec.ecl.service.GiftCertificatesService;
 
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
+@Transactional
 public class GiftCertificateServiceImpl implements GiftCertificatesService {
 
     private final Mapper mapper;
@@ -33,24 +34,24 @@ public class GiftCertificateServiceImpl implements GiftCertificatesService {
 
     @Override
     public List<GiftCertificateDto> findByPartOfName(String partOnName) {
-        List<GiftCertificate> byPartOfName = repository.findByPartOfName(partOnName);
+        List<GiftCertificate> byPartOfName = repository.findByNameContaining(partOnName);
         return byPartOfName.stream().map(mapper::convert).toList();
     }
 
     @Override
     public List<GiftCertificateDto> findByPartOfDescription(String partOnName) {
-        List<GiftCertificate> byPartOfDescription = repository.findByPartOfDescription(partOnName);
+        List<GiftCertificate> byPartOfDescription = repository.findByDescriptionContaining(partOnName);
         return byPartOfDescription.stream().map(mapper::convert).toList();
     }
 
     @Override
     public List<GiftCertificateDto> findCertificateByTagName(String tagName) {
-        List<GiftCertificate> byTagName = repository.findCertificateByTagName(tagName);
+        List<GiftCertificate> byTagName = repository.findGiftCertificatesByTagName(tagName);
         return byTagName.stream().map(mapper::convert).toList();
     }
 
-    public GiftCertificateDto findById(int id) throws MyException {
-        return mapper.convert(repository.findById(id));
+    public GiftCertificateDto findById(int id) {
+        return mapper.convert(repository.findById(id).orElse(null));
     }
 
     public GiftCertificateDto save(GiftCertificateDto giftCertificateDto) {
@@ -59,14 +60,15 @@ public class GiftCertificateServiceImpl implements GiftCertificatesService {
     }
 
     @Override
-    public int delete(int id) {
-        return repository.delete(id);
+    public void delete(int id) {
+        repository.deleteById(id);
     }
 
     /**
      * Method filter data with given parameters.
-     * @param tagName - part of Tag name.
-     * @param certName - part of GiftCertificate field "name"
+     *
+     * @param tagName     - part of Tag name.
+     * @param certName    - part of GiftCertificate field "name"
      * @param description - part of GiftCertificate field "description"
      * @return - list of filtered objects.
      */
@@ -77,20 +79,20 @@ public class GiftCertificateServiceImpl implements GiftCertificatesService {
                                                                String description) {
         List<GiftCertificate> resultList = new ArrayList<>();
         if (tagName != null) {
-            resultList.addAll(repository.findCertificateByTagName(tagName));
+            resultList.addAll(repository.findGiftCertificatesByTagName(tagName));
         }
         if (certName != null) {
             if (resultList.isEmpty()) {
-                resultList.addAll(repository.findByPartOfName(certName));
+                resultList.addAll(repository.findByNameContaining(certName));
             } else {
-                resultList.retainAll(repository.findByPartOfName(certName));
+                resultList.retainAll(repository.findByNameContaining(certName));
             }
         }
         if (description != null) {
             if (resultList.isEmpty()) {
-                resultList.addAll(repository.findByPartOfDescription(description));
+                resultList.addAll(repository.findByDescriptionContaining(description));
             } else {
-                resultList.retainAll(repository.findByPartOfDescription(description));
+                resultList.retainAll(repository.findByDescriptionContaining(description));
             }
         }
         resultList = resultList.stream().distinct().toList();

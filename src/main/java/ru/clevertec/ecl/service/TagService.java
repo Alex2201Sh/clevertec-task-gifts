@@ -10,9 +10,9 @@ public interface TagService {
 
     TagDto findByName(String name);
 
-    TagDto findById(int id) throws MyException;
+    TagDto findById(int id);
 
     TagDto save(TagDto tagDto);
 
-    int delete(int id);
+    void delete(int id);
 }

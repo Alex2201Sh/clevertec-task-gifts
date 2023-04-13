@@ -1,7 +1,6 @@
 package ru.clevertec.ecl.service;
 
 import ru.clevertec.ecl.dto.GiftCertificateDto;
-import ru.clevertec.ecl.exceptions.MyException;
 
 import java.util.List;
 
@@ -14,11 +13,11 @@ public interface GiftCertificatesService {
 
     List<GiftCertificateDto> findCertificateByTagName(String tagName);
 
-    GiftCertificateDto findById(int id) throws MyException;
+    GiftCertificateDto findById(int id);
 
     GiftCertificateDto save(GiftCertificateDto giftCertificateDto);
 
-    int delete(int id);
+    void delete(int id);
 
     List<GiftCertificateDto> filterGiftCertificatesList(String tagName,
                                                         String certName,

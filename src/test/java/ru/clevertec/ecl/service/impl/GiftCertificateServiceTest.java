@@ -57,12 +57,12 @@ class GiftCertificateServiceTest {
 
     @Test
     void findCertificateByTagName() {
-        List<GiftCertificateDto> list = service.findCertificateByTagName("one");
+        List<GiftCertificateDto> list = service.findCertificateByTagName("five");
         assertThat(list).isNotEmpty();
     }
 
     @Test
-    void findById() throws MyException {
+    void findById(){
         GiftCertificateDto byId = service.findById(testObject.getId());
         assertThat(byId).isEqualTo(testObject);
     }

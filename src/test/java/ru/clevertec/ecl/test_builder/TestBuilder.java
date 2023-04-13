@@ -1,6 +1,5 @@
 package ru.clevertec.ecl.test_builder;
 
-import org.postgresql.util.PGInterval;
 import ru.clevertec.ecl.bean.GiftCertificate;
 import ru.clevertec.ecl.dto.GiftCertificateDto;
 

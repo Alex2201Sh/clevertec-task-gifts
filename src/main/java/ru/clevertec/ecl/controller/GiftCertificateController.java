@@ -9,15 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.clevertec.ecl.bean.GiftCertificate;
 import ru.clevertec.ecl.dto.GiftCertificateDto;
-import ru.clevertec.ecl.exceptions.MyException;
 import ru.clevertec.ecl.service.ObjectSerializer;
 import ru.clevertec.ecl.service.impl.GiftCertificateServiceImpl;
 import ru.clevertec.ecl.utils.CustomBeanUtils;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/gifts")
@@ -56,13 +53,7 @@ public class GiftCertificateController {
     public ResponseEntity<String> getGiftCertificateById(@PathVariable("id") int id){
         GiftCertificateDto giftCertificate;
         HttpHeaders headers = new HttpHeaders();
-        try {
-            giftCertificate = service.findById(id);
-        } catch (MyException exc) {
-            return new ResponseEntity<>(
-                    serializer.objectToJson(new HashMap<>(Map.of(exc.getMessage(), exc.getCode()))),
-                    headers, HttpStatus.NOT_FOUND);
-        }
+        giftCertificate = service.findById(id);
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(serializer.objectToJson(giftCertificate), headers, HttpStatus.OK);
     }
@@ -82,12 +73,7 @@ public class GiftCertificateController {
                                          @RequestBody GiftCertificate giftCertificate){
         GiftCertificateDto giftCertificateFromDb;
         HttpHeaders headers = new HttpHeaders();
-        try {
-            giftCertificateFromDb = service.findById(id);
-        } catch (MyException exc) {
-            return new ResponseEntity<>(
-                    serializer.objectToJson(exc), headers, HttpStatus.BAD_REQUEST);
-        }
+        giftCertificateFromDb = service.findById(id);
         CustomBeanUtils.copyProperties(giftCertificate, giftCertificateFromDb);
         GiftCertificateDto saved = service.save(giftCertificateFromDb);
         headers.setContentType(MediaType.APPLICATION_JSON);
